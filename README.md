@@ -1,30 +1,30 @@
 # Phased Array Antenna Simulation (MATLAB)
 
 ## Overview
-This project is a MATLAB-based simulation of a **uniform linear phased array antenna**, developed to study electronic beam steering and key radiation pattern performance metrics. The simulation is built from first principles using the analytical **array factor formulation**, with a focus on understanding how array parameters affect beam shape and sidelobes.
+This repository contains a MATLAB-based simulation of a **uniform linear phased array antenna**, developed from first principles using the analytical **array factor formulation**. The project focuses on electronic beam steering and quantitative evaluation of radiation pattern performance metrics.
 
-The project serves both as a learning tool and a foundation for more advanced phased array analysis, including amplitude tapering and hardware-aware beamforming.
+The goal of this project is to build a clear theoretical and practical foundation in phased array behavior while producing clean, extensible simulation code suitable for further research, coursework, or hardware-oriented extensions.
 
 ---
 
-## Features
+## Key Features
 - Electronic beam steering via progressive phase shift  
-- Visualization of radiation patterns for a uniform linear array  
-- Analysis of grating lobes as a function of element spacing  
-- Computation of key antenna performance metrics:
+- Radiation pattern visualization (linear, normalized, and dB scales)  
+- Analysis of grating lobe formation as a function of element spacing  
+- Automated computation of core antenna performance metrics:
   - **Half-Power Beamwidth (HPBW)**
   - **First-Null Beamwidth (FNBW)**
   - **Sidelobe Level (SLL)** (linear and dB)
-- Structured storage of simulation results for reuse and analysis  
 - Annotated plots for clear interpretation of results  
+- Export of performance metrics to structured tables and CSV files  
 
 ---
 
 ## Performance Metrics
-The simulation computes and reports key phased array performance metrics directly from the array factor:
+The simulation extracts standard phased array performance parameters directly from the computed array factor:
 
 - **Half-Power Beamwidth (HPBW)**  
-  Angular width of the main lobe at the −3 dB (0.707× peak) level.
+  Angular width of the main lobe measured at the −3 dB (0.707× peak) level.
 
 - **First-Null Beamwidth (FNBW)**  
   Angular separation between the first nulls surrounding the main beam.
@@ -32,76 +32,78 @@ The simulation computes and reports key phased array performance metrics directl
 - **Sidelobe Level (SLL)**  
   Ratio of the highest sidelobe magnitude to the main beam peak, reported in both linear scale and decibels (dB).
 
-All metrics are stored programmatically for reuse in analysis, visualization, and future parameter sweeps.
+All metrics are computed programmatically and stored for reuse in visualization, parameter sweeps, or future optimization studies.
 
 ---
 
-## Key Concepts Explored
-- Array factor and constructive/destructive interference  
-- Beam steering using phase progression  
-- Effects of element spacing and array size  
-- Relationship between beamwidth, sidelobes, and array geometry  
-- Practical limitations such as grating lobes  
+## Concepts Explored
+- Array factor theory and superposition of radiating elements  
+- Constructive and destructive interference in phased arrays  
+- Beam steering through phase progression  
+- Effects of element spacing and array size on beamwidth and sidelobes  
+- Practical limitations such as grating lobes and scan behavior  
 
 ---
 
 ## Adjustable Parameters
-The simulation allows easy modification of:
-- Number of array elements (`N`)
+The simulation allows direct modification of key array parameters:
+- Number of elements (`N`)
 - Element spacing (`d`)
 - Operating wavelength (`λ`)
 - Beam steering angle (`θ₀`)
+- Plot configuration (raw, normalized, or dB scale)
 
-These parameters can be adjusted to explore trade-offs between beamwidth, sidelobe level, and grating lobe formation.
+These parameters enable exploration of fundamental design trade-offs in phased array systems.
 
 ---
 
 ## How to Run
 1. Clone or download this repository.
 2. Open `phased_array_simulation.m` in MATLAB.
-3. Modify array parameters at the top of the script as desired:
-   - Number of elements (`N`)
-   - Element spacing (`d`)
-   - Wavelength (`λ`)
-   - Beam steering angle (`θ₀`)
-4. Run the script to generate the radiation pattern and computed performance metrics.
+3. Modify array and plotting parameters near the top of the script as desired.
+4. Run the script.
 
-The script produces annotated radiation pattern plots and prints key performance metrics for the configured array.
+The simulation generates annotated radiation pattern plots and outputs computed performance metrics to both the MATLAB workspace and a CSV file for further analysis.
 
 ---
 
 ## Example Output
 The simulation produces:
 - Radiation pattern plots versus angle (degrees)
-- Visual indicators for HPBW and beam characteristics
-- Computed performance metrics stored in structured variables and tables
+- Visual indicators for HPBW and −3 dB reference levels
+- Computed performance metrics displayed in tables and saved for reuse
 
-This makes the results suitable for further analysis, reports, or presentations.
+This structure makes the results suitable for reports, presentations, and future extensions.
 
 ---
 
 ## Future Work
-Planned extensions to this project include:
-- Amplitude weighting (Taylor, Chebyshev tapers)
-- Sidelobe suppression vs beamwidth trade-off analysis
-- Phase quantization and hardware-aware beam steering
-- Parameter sweeps and automated performance plots
-- Real-time parameter adjustment using MATLAB UI sliders
+Planned extensions include:
+- Amplitude weighting (Taylor and Chebyshev tapers)
+- Quantitative sidelobe suppression vs. beamwidth trade-off analysis
+- Phase quantization and hardware-aware beam steering models
+- Parameter sweeps and automated comparison plots
+- Real-time parameter control using MATLAB UI sliders
+- Hardware-oriented extensions toward phased array implementation
 
 ---
 
 ## Motivation
-This project was developed to build a strong theoretical and practical foundation in phased array antennas, bridging coursework in electromagnetics and antenna engineering with simulation-based analysis used in real-world RF systems.
+This project was developed to strengthen practical understanding of phased array antennas by bridging electromagnetic theory with simulation-based analysis techniques used in RF and antenna engineering.
 
 ---
 
 ## Example Radiation Patterns
-The following figures illustrate key phased array behaviors explored in this project.
+The figures below demonstrate key phased array behaviors explored in this project.
+
 ### Broadside Array Pattern
 ![Broadside radiation pattern](Images/Broadside.png)
-### Example of Beamsteering
+
+### Beam Steering Example
 ![Beamsteering](Images/Beamsteering.png)
-### Changing Beamwidth by changing number of elements
+
+### Beamwidth Variation with Number of Elements
 ![Change in Beamwidth](Images/Change_In_Beamwidth.png)
-### Introducing Grating Lobes by changing distance between elements
+
+### Grating Lobe Formation with Increased Element Spacing
 ![Grating Lobes](Images/Grating_Lobes.png)
