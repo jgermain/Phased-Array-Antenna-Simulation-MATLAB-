@@ -20,6 +20,22 @@ The project serves both as a learning tool and a foundation for more advanced ph
 
 ---
 
+## Performance Metrics
+The simulation computes and reports key phased array performance metrics directly from the array factor:
+
+- **Half-Power Beamwidth (HPBW)**  
+  Angular width of the main lobe at the −3 dB (0.707× peak) level.
+
+- **First-Null Beamwidth (FNBW)**  
+  Angular separation between the first nulls surrounding the main beam.
+
+- **Sidelobe Level (SLL)**  
+  Ratio of the highest sidelobe magnitude to the main beam peak, reported in both linear scale and decibels (dB).
+
+All metrics are stored programmatically for reuse in analysis, visualization, and future parameter sweeps.
+
+---
+
 ## Key Concepts Explored
 - Array factor and constructive/destructive interference  
 - Beam steering using phase progression  
@@ -37,6 +53,20 @@ The simulation allows easy modification of:
 - Beam steering angle (`θ₀`)
 
 These parameters can be adjusted to explore trade-offs between beamwidth, sidelobe level, and grating lobe formation.
+
+---
+
+## How to Run
+1. Clone or download this repository.
+2. Open `phased_array_simulation.m` in MATLAB.
+3. Modify array parameters at the top of the script as desired:
+   - Number of elements (`N`)
+   - Element spacing (`d`)
+   - Wavelength (`λ`)
+   - Beam steering angle (`θ₀`)
+4. Run the script to generate the radiation pattern and computed performance metrics.
+
+The script produces annotated radiation pattern plots and prints key performance metrics for the configured array.
 
 ---
 
@@ -66,7 +96,7 @@ This project was developed to build a strong theoretical and practical foundatio
 ---
 
 ## Example Radiation Patterns
-
+The following figures illustrate key phased array behaviors explored in this project.
 ### Broadside Array Pattern
 ![Broadside radiation pattern](Images/Broadside.png)
 ### Example of Beamsteering
