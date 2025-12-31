@@ -68,7 +68,7 @@ This project was developed to build a strong theoretical and practical foundatio
 ## Example Radiation Patterns
 
 ### Broadside Array Pattern
-![Broadside radiation pattern](Images/Broadside)
-![Beamsteering](Images/Beamsteering)
-![Change in Beamwidth](Images/Change_In_Beamwidth)
-![Grating Lobes](Images/Grating_Lobes)
+![Broadside radiation pattern](Images/Broadside.png)
+![Beamsteering](Images/Beamsteering.png)
+![Change in Beamwidth](Images/Change_In_Beamwidth.png)
+![Grating Lobes](Images/Grating_Lobes.png)
