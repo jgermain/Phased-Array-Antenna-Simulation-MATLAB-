@@ -1,96 +1,147 @@
-% =========================
-%  Phased Array Simulation
-% =========================
+% Phased Array Antenna Simulation (Uniform Linear Array)
+% -----------------------------------------------------
+% This script simulates the radiation pattern of a uniform linear
+% phased array antenna using the analytical array factor formulation.
+%
+% Features:
+%   - Electronic beam steering
+%   - HPBW, FNBW, and Sidelobe Level computation
+%   - Optional normalization and dB plotting
+%   - Annotated radiation pattern visualization
+%   - Export of performance metrics for analysis
+%
+% Author: Josiah Germain
+
 
 % Housekeeping
-close all; clear all; clc;
+% --------------------------
+close all; clear; clc;
 
 
-% Defining parameters
-lambda = 0.3;                  % lambda = c/f [m]
-K = (2*pi)/lambda;             % Wavenumber
-d = lambda/2;                  % Spaceing between elements. Change to see grating lobes
-N = 8;                        % Number of elements. Change to see beamwidth change
+% User Plot Options
+% --------------------------
+useNormalization = true;    % true = normalize AF for plotting
+useDecibelPlot  = true;    % true = plot in dB (requires normalization)
 
-% Beamsteering
-theta_degrees = 30;                      % Angle in degrees. Change to see beamforming
-theta_0 = theta_degrees * (pi/180);     % Converts angle to radians
+
+% Defining Parameters
+% --------------------------
+lambda = 0.3;                  % Wavelength [m]
+K = 2*pi/lambda;               % Wavenumber
+d = lambda/2;                  % Element spacing
+N = 16;                         % Number of elements
+
+
+% Beam Steering
+% --------------------------
+theta_degrees = 0;                    % Steering angle [deg]
+theta_0 = deg2rad(theta_degrees);      % Convert to radians
 B = -K*d*sin(theta_0);
 
-% Creating array of angles to sweep magnitude spacially
-theta_radians = 90 * (pi/180);           % Angles you want to sweep converted to radians
-theta = linspace(-theta_radians, theta_radians, 1000);
 
-% Initializing the array factor to the same size as theta
+% Angular Sweep
+% --------------------------
+theta_max = pi/2;
+numPoints = 1000;
+theta = linspace(-theta_max, theta_max, numPoints);
+
+
+% Array Factor Calculation
+% --------------------------
 ArrayFactor = zeros(size(theta));
 
-% Creating for loop to sum all contributions from each element
 for n = 0:N-1
-
-    ArrayFactor = ArrayFactor + exp(1i * n * (K * d * sin(theta) + B));
-
+    ArrayFactor = ArrayFactor + exp(1i * n * (K*d*sin(theta) + B));
 end
 
-% Calculate the magnitude of the array factor
-ArrayFactorMagnitude = abs(ArrayFactor);
+AF_mag = abs(ArrayFactor);
+AF_peak = max(AF_mag);
 
-% Calculating the First-Null Bandwidth (FNBW) in degrees and displaying
+
+% Beamwidth Metrics
+% --------------------------
+
+% First-Null Beamwidth (theoretical)
 FNBW = 2 * asind(lambda/(N*d));
 
-% Calculating Half-Power Bandwidth (HPBW) in degrees
-[AF_Max,Index_Max] = max(ArrayFactorMagnitude);                       % Gives Max value and where it occured
+% Half-Power Beamwidth
+[~, Index_Max] = max(AF_mag);
 
-    % Left bound
 Index_Left = Index_Max;
-while (ArrayFactorMagnitude(Index_Left) >= (0.707 * ArrayFactorMagnitude(Index_Max))) && (Index_Left > 1)
+while Index_Left > 1 && AF_mag(Index_Left) >= 0.707 * AF_peak
     Index_Left = Index_Left - 1;
 end
 
-    % Right bound
 Index_Right = Index_Max;
-while (ArrayFactorMagnitude(Index_Right) >= (0.707 * ArrayFactorMagnitude(Index_Max))) && (Index_Right < length(ArrayFactorMagnitude))
+while Index_Right < length(AF_mag) && AF_mag(Index_Right) >= 0.707 * AF_peak
     Index_Right = Index_Right + 1;
 end
 
 HPBW = rad2deg(theta(Index_Right) - theta(Index_Left));
 
-% Calculating Sidelobe Level (SLL)
 
-    % Finding left and right index of first nulls to isolate sidelobes
+% Sidelobe Level (SLL)
+% --------------------------
+
+% Find first nulls to isolate sidelobes
 i_left = Index_Max;
-while i_left > 1 && ArrayFactorMagnitude(i_left) >= ArrayFactorMagnitude(i_left-1)
+while i_left > 1 && AF_mag(i_left) >= AF_mag(i_left-1)
     i_left = i_left - 1;
 end
 
 i_right = Index_Max;
-while i_right < length(ArrayFactorMagnitude) && ArrayFactorMagnitude(i_right) >= ArrayFactorMagnitude(i_right+1)
+while i_right < length(AF_mag) && AF_mag(i_right) >= AF_mag(i_right+1)
     i_right = i_right + 1;
 end
 
-Left_Lobes = ArrayFactorMagnitude(1:i_left - 1);
-Right_Lobes = ArrayFactorMagnitude(i_right + 1:end);
+Left_Lobes  = AF_mag(1:i_left-1);
+Right_Lobes = AF_mag(i_right+1:end);
 
-Max_Sidelobe = max(max(Left_Lobes),max(Right_Lobes));
-SLL = Max_Sidelobe / AF_Max;
+Max_Sidelobe = max([Left_Lobes, Right_Lobes]);
+SLL = Max_Sidelobe / AF_peak;
 SLL_dB = 20*log10(SLL);
 
 
-% Plotting the array factor magnitude against the angles
-theta_deg = rad2deg(theta);
-figure;
-plot(theta_deg, ArrayFactorMagnitude);
-xlabel('Angle (degrees)');
-ylabel('Array Factor Magnitude');
-title('Phased Array Pattern');
-grid on;
+% Prepare Data for Plotting
+% --------------------------
+if useNormalization
+    AF_plot = AF_mag / AF_peak;
+else
+    AF_plot = AF_mag;
+end
 
-% Annotating plot
+theta_deg = rad2deg(theta);
+
+
+% Plot Radiation Pattern
+% --------------------------
+figure; hold on; grid on;
+
+if useDecibelPlot
+    plot(theta_deg, 20*log10(AF_plot), 'LineWidth', 1.5);
+    ylabel('Array Factor (dB)');
+    yline(-3,'--','-3 dB');
+else
+    plot(theta_deg, AF_plot, 'LineWidth', 1.5);
+    ylabel('Array Factor Magnitude');
+    yline(0.707 * (useNormalization + ~useNormalization*AF_peak), ...
+          '--','-3 dB Level');
+end
+
+xlabel('Angle (degrees)');
+title('Phased Array Radiation Pattern');
+
+% HPBW markers
+xline(rad2deg(theta(Index_Left)),'--');
+xline(rad2deg(theta(Index_Right)),'--');
+
+% Annotation
 txt = {
     sprintf('N = %d', N)
     sprintf('d = %.2f \\lambda', d/lambda)
     sprintf('HPBW = %.2f°', HPBW)
     sprintf('FNBW = %.2f°', FNBW)
-    sprintf('SLL = %.2f dB', 20*log10(SLL))
+    sprintf('SLL = %.2f dB', SLL_dB)
 };
 
 text(0.02, 0.95, txt, ...
@@ -99,18 +150,14 @@ text(0.02, 0.95, txt, ...
     'BackgroundColor','w', ...
     'EdgeColor','k');
 
-% Visual for HPBW
-hold on
-yline(0.707*AF_Max,'--','-3 dB Level');
-xline(rad2deg(theta(Index_Left)),'--');
-xline(rad2deg(theta(Index_Right)),'--');
-hold off
+hold off;
 
-% Creating table for data
+
+% Results Table
+% --------------------------
 ResultsTable = table( ...
-    N, d/lambda, HPBW, FNBW, 20*log10(SLL), ...
+    N, d/lambda, HPBW, FNBW, SLL_dB, ...
     'VariableNames', {'N','d_over_lambda','HPBW_deg','FNBW_deg','SLL_dB'});
 
-% Displaying and saving results
-display(ResultsTable);
-writetable(ResultsTable,'phased_array_metrics.csv')
+disp(ResultsTable);
+writetable(ResultsTable,'phased_array_metrics.csv');
