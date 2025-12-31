@@ -69,6 +69,9 @@ This project was developed to build a strong theoretical and practical foundatio
 
 ### Broadside Array Pattern
 ![Broadside radiation pattern](Images/Broadside.png)
+### Example of Beamsteering
 ![Beamsteering](Images/Beamsteering.png)
+### Changing Beamwidth by changing number of elements
 ![Change in Beamwidth](Images/Change_In_Beamwidth.png)
+### Introducing Grating Lobes by changing distance between elements
 ![Grating Lobes](Images/Grating_Lobes.png)
