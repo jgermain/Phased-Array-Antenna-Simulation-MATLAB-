@@ -109,7 +109,7 @@ The figures below demonstrate key phased array behaviors explored in this projec
 ![Grating Lobes](Images/Grating_Lobes.png)
 
 ### Normalized Plot
-![Normalized Plot](Images/Normalized_Plot)
+![Normalized Plot](Images/Normalized_Plot.png)
 
 ### Decibel Plot
-![Decibel Plot](Images/Decibel_Plot)
+![Decibel Plot](Images/Decibel_Plot.png)
