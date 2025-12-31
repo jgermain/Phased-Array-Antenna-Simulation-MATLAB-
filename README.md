@@ -107,3 +107,9 @@ The figures below demonstrate key phased array behaviors explored in this projec
 
 ### Grating Lobe Formation with Increased Element Spacing
 ![Grating Lobes](Images/Grating_Lobes.png)
+
+### Normalized Plot
+![Normalized Plot](Images/Normalized_Plot)
+
+### Decibel Plot
+![Decibel Plot](Images/Decibel_Plot)
